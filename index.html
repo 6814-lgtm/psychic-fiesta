@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dech Crypt | Ultimate Profile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        body {
+            background: linear-gradient(-45deg, #0f172a, #1e1b4b, #312e81, #1e1b4b);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            color: white;
+            font-family: 'Segoe UI', sans-serif;
+            overflow: hidden;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 2rem;
+            box-shadow: 0 0 40px rgba(79, 70, 229, 0.3);
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .profile-ring {
+            position: relative;
+            padding: 5px;
+            background: linear-gradient(to right, #6366f1, #a855f7, #ec4899);
+            border-radius: 50%;
+            animation: rotate-border 3s linear infinite;
+        }
+
+        @keyframes rotate-border {
+            0% { filter: hue-rotate(0deg); }
+            100% { filter: hue-rotate(360deg); }
+        }
+
+        .btn-fancy {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-fancy:hover {
+            transform: scale(1.05) translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-fancy::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: rotate(45deg);
+            transition: 0.5s;
+            opacity: 0;
+        }
+
+        .btn-fancy:hover::after {
+            left: 120%;
+            opacity: 1;
+        }
+
+        /* เอฟเฟคอนุภาควิ่งวน (Particles Background) */
+        .particles {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+
+    <canvas id="particleCanvas" class="particles"></canvas>
+
+    <div class="glass-card max-w-sm w-full p-10 text-center relative z-10 animate-in fade-in zoom-in duration-1000">
+        
+        <div class="flex justify-center mb-8">
+            <div class="profile-ring shadow-[0_0_30px_rgba(99,102,241,0.6)]">
+                <img id="avatar" 
+                     src="https://ui-avatars.com/api/?name=Dech+Crypt&background=4f46e5&color=fff&size=256" 
+                     alt="Profile" 
+                     class="w-32 h-32 rounded-full object-cover border-4 border-[#0f172a]">
+                <div class="absolute bottom-2 right-2 w-7 h-7 bg-green-500 border-4 border-[#1e1b4b] rounded-full"></div>
+            </div>
+        </div>
+
+        <h1 class="text-4xl font-black mb-2 tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400">
+            Dech Crypt
+        </h1>
+        <p class="text-indigo-300/80 text-xs font-bold uppercase tracking-[0.3em] mb-10">Developer & Bot Owner</p>
+
+        <div class="flex flex-col gap-5">
+            <a href="https://discord.com/oauth2/authorize?client_id=1467231777751044271&permissions=8&integration_type=0&scope=bot" 
+               target="_blank"
+               class="btn-fancy group flex items-center justify-between px-6 py-4 bg-indigo-600/20 rounded-2xl">
+                <span class="font-bold tracking-wide">เชิญบอทเข้าเซิร์ฟ</span>
+                <i class="fab fa-discord text-2xl group-hover:rotate-12 transition-transform"></i>
+            </a>
+
+            <a href="https://discord.gg/ndNrcrd9W" 
+               target="_blank"
+               class="btn-fancy group flex items-center justify-between px-6 py-4 bg-slate-800/40 rounded-2xl">
+                <span class="font-bold tracking-wide">Join Server Discord</span>
+                <i class="fab fa-discord text-2xl text-blue-400"></i>
+            </a>
+
+            <a href="https://www.instagram.com/dech_crypt?igsh=cXNia3J4ZTZxeXdu" 
+               target="_blank"
+               class="btn-fancy group flex items-center justify-between px-6 py-4 bg-gradient-to-r from-pink-600/20 to-orange-500/20 rounded-2xl">
+                <span class="font-bold tracking-wide">Instagram</span>
+                <i class="fab fa-instagram text-2xl text-pink-500"></i>
+            </a>
+        </div>
+
+        <div class="mt-12 text-[9px] text-indigo-300/40 font-bold uppercase tracking-[0.5em]">
+            MT 2026 | UNACERES SPACE
+        </div>
+    </div>
+
+    <script>
+        // ระบบดึงรูปจาก ID Discord
+        const discordID = "1405367352937287713";
+        const avatar = document.getElementById('avatar');
+
+        async function getAvatar() {
+            const url = `https://cdn.discordapp.com/avatars/${discordID}/a_8622838392838.png?size=256`;
+            const res = await fetch(url);
+            if(res.ok) avatar.src = url;
+        }
+        getAvatar();
+
+        // ระบบ Particle Background (หิมะเรืองแสงวิ่งไปมา)
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function init() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            for(let i=0; i<50; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 2 + 1,
+                    speedX: Math.random() * 1 - 0.5,
+                    speedY: Math.random() * 1 - 0.5
+                });
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                ctx.fillStyle = 'rgba(99, 102, 241, 0.3)';
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+                p.x += p.speedX;
+                p.y += p.speedY;
+                if(p.x < 0 || p.x > canvas.width) p.speedX *= -1;
+                if(p.y < 0 || p.y > canvas.height) p.speedY *= -1;
+            });
+            requestAnimationFrame(animate);
+        }
+        init(); animate();
+    </script>
+</body>
+</html>
